@@ -61,12 +61,18 @@
     <h1 id="faction-title">⚜ ORBIS TERRARUM ⚜</h1>
     <small id="app-meta"></small>
   </div>
-  <div class="wrap" id="app-content"></div>
-  <div class="logout"><a onclick="logout()">← Cambia fazione</a></div>
+  <div class="wrap">
+    <details id="visit-panel" style="margin-bottom:1rem;border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem;background:#0f0c0655">
+      <summary style="cursor:pointer;font-family:'Cinzel',serif;font-size:0.9rem;color:var(--gold-light);list-style:none">👁️ Visita le altre Corti</summary>
+      <div id="visit-list" style="margin-top:0.6rem;display:flex;flex-wrap:wrap;gap:0.5rem"></div>
+    </details>
+    <div id="app-content"></div>
+  </div>
+  <div class="logout"><a onclick="logout()">← Cambia fazione</a> &nbsp;·&nbsp; <a onclick="showVisitList()">👁️ Visita le altre Corti</a></div>
 </div>
 
 <script>
-var CHRONICLE_DATA = {"world_name": "Orbis Terrarum", "turn": 8, "month_year": "Agosto, Anno 1", "generated_at": "16/09/2026 17:04", "factions": {"Arcontato della Salvezza": {"race": "Umani", "zone": "Centro", "military": 4, "stability": 6, "population": 8, "resources": {"cibo": 16.0, "legname": 45.0, "pietra": 19.0, "ferro": 5.0, "gemme": 1.0, "oro": 165.0}, "territories": ["Arcontato della Salvezza (capitale)", "C12", "C14", "S21"], "buildings": ["Biblioteca della Rivelazione Eterna", "Prefettura dei Rifornimenti e delle Oasi", "Grande Oasi della Redenzione", "Ordine dei Cartografi della Luce", "Fattoria, LV2, C12", "Fattoria, LV2, C13 (Capitale)"], "troops": {"Purificatori": 3}, "researches_active": [], "researches_completed": [{"name": "Programma di Ricerca Agraria e Officinale", "category": "custom", "effect": "\"+3 Cibo per Fattoria permanente.\""}, {"name": "Agricoltura intensiva", "category": "minor", "effect": "+1 Cibo per turno permanente"}], "artifacts": [], "diplomacy": [{"fazione": "I Figli del Filo", "stato": "patto commerciale", "scambio": {"esporta": {}, "riceve": {}, "bonus": {"oro": 12.0}, "turni_rimanenti": null, "note": ""}}], "characters": [{"name": "Ardenis IV", "role": "Sovrano", "type": "Diplomatico", "trait": "Oratore: trattati più facili da ratificare, Benedetto dagli Dei: le feste religiose hanno effetto doppio", "status": "attivo", "notes": ""}, {"name": "Sultanius Arren", "role": "Ricercatore", "type": "Ricercatore", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}, {"name": "Aurelius Valerian", "role": "Pontifex Belli", "type": "Generale", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}, {"name": "Sarlena Osiris", "role": "Personaggio", "type": "Ricercatore", "trait": "", "genere": "F", "eventi": [], "status": "attivo", "notes": ""}], "password_hash": "e7a86472"}, "La Casta Operosa": {"race": "Drah", "zone": "Sud", "military": 5, "stability": 4, "population": 3, "resources": {"cibo": -16.0, "legname": 16.0, "pietra": 42.0, "ferro": 21.0, "gemme": 1.0, "oro": 84.0}, "territories": ["La Casta Operosa (capitale)", "S8", "S7", "P22"], "buildings": ["Archivio Logistico Centrale", "Banchine d'Attracco (pesca), LV1, S7", "Silos, LV1, S7", "Fattoria, LV1, S8", "Città, LV1, S7", "Città, LV1, S8"], "troops": {"Fanteria": 3, "Schermagliatori": 1}, "researches_active": [], "researches_completed": [{"name": "Agricoltura Intensiva", "category": "minor", "effect": "+1 Cibo per turno permanente"}, {"name": "Tattiche di fanteria", "category": "minor", "effect": "Bonus difensivo nelle battaglie campali"}], "artifacts": [{"name": "Monete d'epoca", "rarity": "common", "description": "Una cassa di monete antiche di valore ancora riconosciuto dai mercanti.", "effect": {"oro": 4}, "active": true}], "diplomacy": [{"fazione": "Karag-Duraz", "stato": "patto commerciale", "scambio": {"esporta": {"cibo": 2.0, "oro": 3.0}, "riceve": {"legname": 1.0, "pietra": 2.0, "ferro": 2.0}, "bonus": {"oro": 6.0}, "turni_rimanenti": 4, "note": ""}}], "characters": [{"name": "Elias Dorn", "role": "Sovrano", "type": "Amministratore", "trait": "Commerciante nato: rotte commerciali più redditizie, Arbiter della Meritocrazia: L'autorità di Dorn trasforma le revisioni sociali in strumenti di controllo della Stabilità; il timore del declassamento spinge la popolazione a performance lavorative di alto livello, garantendo bonus alla produzione di risorse base e alla stabilità sociale.", "status": "attivo", "notes": ""}, {"name": "Kaelen Vex", "role": "Personaggio", "type": "Mercante", "trait": "", "status": "attivo", "notes": ""}, {"name": "Kaelis Vhor", "role": "Personaggio", "type": "Ricercatore", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}], "password_hash": "d582a0a5"}, "Karag-Duraz": {"race": "Karag-Duraz", "zone": "Nord", "military": 6, "stability": 5, "population": 5, "resources": {"cibo": 56.0, "legname": 26.0, "pietra": 40.0, "ferro": 19.0, "gemme": 2, "oro": 100.0}, "territories": ["Karag-Duraz (capitale)", "N4", "N7", "N5", "N10", "N3", "P7"], "buildings": ["Ambasciata Corte Casta Operosa", "Ambasciata corte Figli del Filo", "Fattoria Sotterranea N6 LV1", "Fattoria Sotterranea N10 LV1", "Fattoria Sotterranea N5 LV1", "Mercato delle Carovane del Nord (capitale)", "Biblioteca Runica dei Sette Clan (capitale)", "Zecca Runica dei Sette Clan, N6", "Grande Miniera del Ferro Nero, LV1, N7", "Fortezza, P7", "Ambasciata corte Velarium della Bruma"], "troops": {"Fanteria": 3, "Arcieri": 2}, "researches_active": [{"name": "Scheggia del Canto di Roccia", "category": "custom", "effect": "Bonus permanente +1 alla produzione delle miniere", "turni_completati": 2, "turni_necessari": 3, "has_researcher": true}], "researches_completed": [{"name": "Architettura militare", "category": "major", "effect": "Fortezze costano 1 PA invece di 2"}], "artifacts": [{"name": "Scheggia del Canto di Roccia", "rarity": "uncommon", "description": "\"Un frammento di pietra traslucida, cavato dalle vene sotto N5, che pare emettere un debolissimo ronzio armonico nelle notti di gelo profondo — lo stesso canto che i minatori del clan Yulruk giuravano di udire tra quelle gallerie dimenticate. Nessun Maestro Archivista ha ancora osato profanarla con lo studio.\"", "effect": {"gemme": 1, "permanente": true, "narrativo": true, "master_note": "Nota per il Master: \"Possibile aggancio futuro alla trama del Primo Giuramento — se un giorno vuoi svilupparla, questo frammento può rivelarsi una chiave. Per ora resta un mistero non svelato, nessuno ha ancora osato studiarlo.\""}, "active": true}], "diplomacy": [{"fazione": "La Casta Operosa", "stato": "patto commerciale", "scambio": {"esporta": {"legname": 1.0, "pietra": 2.0, "ferro": 2.0}, "riceve": {"cibo": 2.0, "oro": 3.0}, "bonus": {"oro": 6.0}, "turni_rimanenti": 4, "note": ""}}, {"fazione": "I Figli del Filo", "stato": "patto commerciale", "scambio": {"esporta": {"pietra": 1.0, "ferro": 2.0}, "riceve": {"cibo": 3.0}, "bonus": {"oro": 6.0}, "turni_rimanenti": null, "note": ""}}], "characters": [{"name": "Vor-Khazad Brannir Frangimartello", "role": "Sovrano", "type": "Generale", "trait": "Stratega: vantaggio battaglie in difesa. Voce degli Antenati: Quando combattono nelle terre del Nord (province 1-10) le truppe ricevono un bonus al morale.", "status": "attivo", "notes": ""}], "password_hash": "423f0740"}, "I Figli del Filo": {"race": "Iorph", "zone": "Est", "military": 3, "stability": 8, "population": 5, "resources": {"cibo": 18.0, "legname": 69.0, "pietra": 22.0, "ferro": 13.0, "gemme": 1.0, "oro": 179.0}, "territories": ["I Figli del Filo (capitale)", "E19", "E16", "E17"], "buildings": ["Grande Emporio dell'Hibiol", "Granai del Fuso", "Archivio Reale (capitale)", "Banchine da Pesca, LV1, E18", "Fattorie Costiere, LV1, E18", "Emporio Reale del Fuso, LV1, E18 (Aumenta efficienza risorse ottenute dagli scambi commerciali)", "Fortezza, LV1, E17"], "troops": {"Schermagliatori": 3, "Fanteria": 1}, "researches_active": [{"name": "Diplomazia avanzata", "category": "major", "effect": "Trattati costano 0 PA", "turni_completati": 2, "turni_necessari": 6, "has_researcher": false}], "researches_completed": [{"name": "Agricoltura Intensiva", "category": "minor", "effect": "+1 Cibo per turno permanente"}, {"name": "Cartografia", "category": "minor", "effect": "Esplorazione costa 0 PA invece di 0.5"}], "artifacts": [], "diplomacy": [{"fazione": "Karag-Duraz", "stato": "patto commerciale", "scambio": {"esporta": {"cibo": 3.0}, "riceve": {"pietra": 1.0, "ferro": 2.0}, "bonus": {"pietra": 1.0, "oro": 7.0}, "turni_rimanenti": null, "note": ""}}, {"fazione": "Arcontato della Salvezza", "stato": "patto commerciale", "scambio": {"esporta": {}, "riceve": {}, "bonus": {"oro": 14.0}, "turni_rimanenti": null, "note": ""}}], "characters": [{"name": "Regina Racine", "role": "Sovrano", "type": "Diplomatico", "trait": "Il Fuso Centrale:i costi diplomatici sono dimezzati e le fazioni che commerciano con i Iorph subiscono un malus di -1 Stabilità se interrompono i rapporti.  Custode del Grande Hibiol: azione diplomatica bonus \"Embargo\": possono interrompere le rotte commerciali di una fazione nemica.", "status": "attivo", "notes": "", "genere": "F"}, {"name": "Tiberias", "role": "Personaggio", "type": "Mercante", "trait": "", "status": "attivo", "notes": ""}], "password_hash": "138d39f1"}, "Il Velarium della Bruma": {"race": "Nebelith", "zone": "Ovest", "military": 5, "stability": 6, "population": 5, "resources": {"cibo": 26.0, "legname": 90.0, "pietra": 25.0, "ferro": 5.0, "gemme": 16.5, "oro": 80.0}, "territories": ["Il Velarium della Bruma (capitale)", "O8", "O2", "O6", "O21"], "buildings": ["Archivio Risorse", "Archivio delle Maree (capitale)", "L'Anello che beve, LV3, Capitale", "Banchina delle Nebbie (pesca), LV3, O2", "Banchina delle Nebbie (pesca), LV1, O8", "Città, LV1, O21"], "troops": {"Grigiomanti": 2}, "researches_active": [{"name": "LA NEBBIA PERENNE", "category": "custom", "effect": "Sbloccare la costruzione dell'Anello del Riflusso, struttura megalitica che impone permanentemente sulla propria provincia il bonus-territorio Nebbia Perenne — velo perpetuo in cui i Nebelith si dissolvono, le truppe divengono impalpabili e i nemici perdono confini e direzione. Il primo strumento del Riflusso.", "turni_completati": 5, "turni_necessari": 6, "has_researcher": true}], "researches_completed": [{"name": "La Lingua delle Radici Sommerse", "category": "custom", "effect": "Obiettivo: padroneggiare l'arte arcana di generare Gemme — cioè indurre artificialmente, tramite l'Anello che Beve e il rito, la condensazione della bruma in gemme, dotando il Velarium di una fonte di mana propria e rinnovabile che nessun'altra fazione possiede."}], "artifacts": [{"name": "Cristallo dell'Era Antica", "rarity": "rare", "description": "Un cristallo di origine sconosciuta che pulsa di energia magica concentrata.", "effect": {"gemme": 3, "permanente": true}, "active": true}], "diplomacy": [], "characters": [{"name": "Majora Nébrahil", "role": "Sovrano", "type": "Mago", "trait": "Veggente: può anticipare alcuni eventi casuali,  Voce del Flutto e della Fronda: le sue magie di occultamento (nebbia, bruma, mimetismo) e di dominio della natura (mare e foresta: mulinelli, radici, correnti, tempeste) sono più potenti ed efficaci.", "status": "attivo", "notes": "", "genere": "F"}, {"name": "Canuto", "role": "Ricercatore", "type": "Ricercatore", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}], "password_hash": "7a4a3de3"}}};
+var CHRONICLE_DATA = {"world_name": "Orbis Terrarum", "turn": 8, "month_year": "Agosto, Anno 1", "generated_at": "16/09/2026 21:17", "factions": {"Arcontato della Salvezza": {"race": "Umani", "zone": "Centro", "military": 4, "stability": 6, "population": 8, "resources": {"cibo": 16.0, "legname": 45.0, "pietra": 19.0, "ferro": 5.0, "gemme": 1.0, "oro": 165.0}, "territories": ["Arcontato della Salvezza (capitale)", "C12", "C14", "S21"], "buildings": ["Biblioteca della Rivelazione Eterna", "Prefettura dei Rifornimenti e delle Oasi", "Grande Oasi della Redenzione", "Ordine dei Cartografi della Luce", "Fattoria, LV2, C12", "Fattoria, LV2, C13 (Capitale)"], "troops": {"Purificatori": 3}, "researches_active": [], "researches_completed": [{"name": "Programma di Ricerca Agraria e Officinale", "category": "custom", "effect": "\"+3 Cibo per Fattoria permanente.\""}, {"name": "Agricoltura intensiva", "category": "minor", "effect": "+1 Cibo per turno permanente"}], "artifacts": [], "diplomacy": [{"fazione": "I Figli del Filo", "stato": "patto commerciale", "scambio": {"esporta": {}, "riceve": {}, "bonus": {"oro": 12.0}, "turni_rimanenti": null, "note": ""}}], "characters": [{"name": "Ardenis IV", "role": "Sovrano", "type": "Diplomatico", "trait": "Oratore: trattati più facili da ratificare, Benedetto dagli Dei: le feste religiose hanno effetto doppio", "status": "attivo", "notes": ""}, {"name": "Sultanius Arren", "role": "Ricercatore", "type": "Ricercatore", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}, {"name": "Aurelius Valerian", "role": "Pontifex Belli", "type": "Generale", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}, {"name": "Sarlena Osiris", "role": "Personaggio", "type": "Ricercatore", "trait": "", "genere": "F", "eventi": [], "status": "attivo", "notes": ""}], "password_hash": "e7a86472"}, "La Casta Operosa": {"race": "Drah", "zone": "Sud", "military": 5, "stability": 4, "population": 3, "resources": {"cibo": -16.0, "legname": 16.0, "pietra": 42.0, "ferro": 21.0, "gemme": 1.0, "oro": 84.0}, "territories": ["La Casta Operosa (capitale)", "S8", "S7", "P22"], "buildings": ["Archivio Logistico Centrale", "Banchine d'Attracco (pesca), LV1, S7", "Silos, LV1, S7", "Fattoria, LV1, S8", "Città, LV1, S7", "Città, LV1, S8"], "troops": {"Fanteria": 3, "Schermagliatori": 1}, "researches_active": [], "researches_completed": [{"name": "Agricoltura Intensiva", "category": "minor", "effect": "+1 Cibo per turno permanente"}, {"name": "Tattiche di fanteria", "category": "minor", "effect": "Bonus difensivo nelle battaglie campali"}], "artifacts": [{"name": "Monete d'epoca", "rarity": "common", "description": "Una cassa di monete antiche di valore ancora riconosciuto dai mercanti.", "effect": {"oro": 4}, "active": true}], "diplomacy": [{"fazione": "Karag-Duraz", "stato": "patto commerciale", "scambio": {"esporta": {"cibo": 2.0, "oro": 3.0}, "riceve": {"legname": 1.0, "pietra": 2.0, "ferro": 2.0}, "bonus": {"oro": 6.0}, "turni_rimanenti": 4, "note": ""}}], "characters": [{"name": "Elias Dorn", "role": "Sovrano", "type": "Amministratore", "trait": "Commerciante nato: rotte commerciali più redditizie, Arbiter della Meritocrazia: L'autorità di Dorn trasforma le revisioni sociali in strumenti di controllo della Stabilità; il timore del declassamento spinge la popolazione a performance lavorative di alto livello, garantendo bonus alla produzione di risorse base e alla stabilità sociale.", "status": "attivo", "notes": ""}, {"name": "Kaelen Vex", "role": "Personaggio", "type": "Mercante", "trait": "", "status": "attivo", "notes": ""}, {"name": "Kaelis Vhor", "role": "Personaggio", "type": "Ricercatore", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}], "password_hash": "d582a0a5"}, "Karag-Duraz": {"race": "Karag-Duraz", "zone": "Nord", "military": 6, "stability": 5, "population": 5, "resources": {"cibo": 56.0, "legname": 26.0, "pietra": 40.0, "ferro": 19.0, "gemme": 2, "oro": 100.0}, "territories": ["Karag-Duraz (capitale)", "N4", "N7", "N5", "N10", "N3", "P7"], "buildings": ["Ambasciata Corte Casta Operosa", "Ambasciata corte Figli del Filo", "Fattoria Sotterranea N6 LV1", "Fattoria Sotterranea N10 LV1", "Fattoria Sotterranea N5 LV1", "Mercato delle Carovane del Nord (capitale)", "Biblioteca Runica dei Sette Clan (capitale)", "Zecca Runica dei Sette Clan, N6", "Grande Miniera del Ferro Nero, LV1, N7", "Fortezza, P7", "Ambasciata corte Velarium della Bruma"], "troops": {"Fanteria": 3, "Arcieri": 2}, "researches_active": [{"name": "Scheggia del Canto di Roccia", "category": "custom", "effect": "Bonus permanente +1 alla produzione delle miniere", "turni_completati": 2, "turni_necessari": 3, "has_researcher": true}], "researches_completed": [{"name": "Architettura militare", "category": "major", "effect": "Fortezze costano 1 PA invece di 2"}], "artifacts": [{"name": "Scheggia del Canto di Roccia", "rarity": "uncommon", "description": "\"Un frammento di pietra traslucida, cavato dalle vene sotto N5, che pare emettere un debolissimo ronzio armonico nelle notti di gelo profondo — lo stesso canto che i minatori del clan Yulruk giuravano di udire tra quelle gallerie dimenticate. Nessun Maestro Archivista ha ancora osato profanarla con lo studio.\"", "effect": {"gemme": 1, "permanente": true, "narrativo": true, "master_note": "Nota per il Master: \"Possibile aggancio futuro alla trama del Primo Giuramento — se un giorno vuoi svilupparla, questo frammento può rivelarsi una chiave. Per ora resta un mistero non svelato, nessuno ha ancora osato studiarlo.\""}, "active": true}], "diplomacy": [{"fazione": "La Casta Operosa", "stato": "patto commerciale", "scambio": {"esporta": {"legname": 1.0, "pietra": 2.0, "ferro": 2.0}, "riceve": {"cibo": 2.0, "oro": 3.0}, "bonus": {"oro": 6.0}, "turni_rimanenti": 4, "note": ""}}, {"fazione": "I Figli del Filo", "stato": "patto commerciale", "scambio": {"esporta": {"pietra": 1.0, "ferro": 2.0}, "riceve": {"cibo": 3.0}, "bonus": {"oro": 6.0}, "turni_rimanenti": null, "note": ""}}], "characters": [{"name": "Vor-Khazad Brannir Frangimartello", "role": "Sovrano", "type": "Generale", "trait": "Stratega: vantaggio battaglie in difesa. Voce degli Antenati: Quando combattono nelle terre del Nord (province 1-10) le truppe ricevono un bonus al morale.", "status": "attivo", "notes": ""}], "password_hash": "423f0740"}, "I Figli del Filo": {"race": "Iorph", "zone": "Est", "military": 3, "stability": 8, "population": 5, "resources": {"cibo": 18.0, "legname": 69.0, "pietra": 22.0, "ferro": 13.0, "gemme": 1.0, "oro": 179.0}, "territories": ["I Figli del Filo (capitale)", "E19", "E16", "E17"], "buildings": ["Grande Emporio dell'Hibiol", "Granai del Fuso", "Archivio Reale (capitale)", "Banchine da Pesca, LV1, E18", "Fattorie Costiere, LV1, E18", "Emporio Reale del Fuso, LV1, E18 (Aumenta efficienza risorse ottenute dagli scambi commerciali)", "Fortezza, LV1, E17"], "troops": {"Schermagliatori": 3, "Fanteria": 1}, "researches_active": [{"name": "Diplomazia avanzata", "category": "major", "effect": "Trattati costano 0 PA", "turni_completati": 2, "turni_necessari": 6, "has_researcher": false}], "researches_completed": [{"name": "Agricoltura Intensiva", "category": "minor", "effect": "+1 Cibo per turno permanente"}, {"name": "Cartografia", "category": "minor", "effect": "Esplorazione costa 0 PA invece di 0.5"}], "artifacts": [], "diplomacy": [{"fazione": "Karag-Duraz", "stato": "patto commerciale", "scambio": {"esporta": {"cibo": 3.0}, "riceve": {"pietra": 1.0, "ferro": 2.0}, "bonus": {"pietra": 1.0, "oro": 7.0}, "turni_rimanenti": null, "note": ""}}, {"fazione": "Arcontato della Salvezza", "stato": "patto commerciale", "scambio": {"esporta": {}, "riceve": {}, "bonus": {"oro": 14.0}, "turni_rimanenti": null, "note": ""}}], "characters": [{"name": "Regina Racine", "role": "Sovrano", "type": "Diplomatico", "trait": "Il Fuso Centrale:i costi diplomatici sono dimezzati e le fazioni che commerciano con i Iorph subiscono un malus di -1 Stabilità se interrompono i rapporti.  Custode del Grande Hibiol: azione diplomatica bonus \"Embargo\": possono interrompere le rotte commerciali di una fazione nemica.", "status": "attivo", "notes": "", "genere": "F"}, {"name": "Tiberias", "role": "Personaggio", "type": "Mercante", "trait": "", "status": "attivo", "notes": ""}], "password_hash": "138d39f1"}, "Il Velarium della Bruma": {"race": "Nebelith", "zone": "Ovest", "military": 5, "stability": 6, "population": 5, "resources": {"cibo": 26.0, "legname": 90.0, "pietra": 25.0, "ferro": 5.0, "gemme": 16.5, "oro": 80.0}, "territories": ["Il Velarium della Bruma (capitale)", "O8", "O2", "O6", "O21"], "buildings": ["Archivio Risorse", "Archivio delle Maree (capitale)", "L'Anello che beve, LV3, Capitale", "Banchina delle Nebbie (pesca), LV3, O2", "Banchina delle Nebbie (pesca), LV1, O8", "Città, LV1, O21"], "troops": {"Grigiomanti": 2}, "researches_active": [{"name": "LA NEBBIA PERENNE", "category": "custom", "effect": "Sbloccare la costruzione dell'Anello del Riflusso, struttura megalitica che impone permanentemente sulla propria provincia il bonus-territorio Nebbia Perenne — velo perpetuo in cui i Nebelith si dissolvono, le truppe divengono impalpabili e i nemici perdono confini e direzione. Il primo strumento del Riflusso.", "turni_completati": 5, "turni_necessari": 6, "has_researcher": true}], "researches_completed": [{"name": "La Lingua delle Radici Sommerse", "category": "custom", "effect": "Obiettivo: padroneggiare l'arte arcana di generare Gemme — cioè indurre artificialmente, tramite l'Anello che Beve e il rito, la condensazione della bruma in gemme, dotando il Velarium di una fonte di mana propria e rinnovabile che nessun'altra fazione possiede."}], "artifacts": [{"name": "Cristallo dell'Era Antica", "rarity": "rare", "description": "Un cristallo di origine sconosciuta che pulsa di energia magica concentrata.", "effect": {"gemme": 3, "permanente": true}, "active": true}], "diplomacy": [], "characters": [{"name": "Majora Nébrahil", "role": "Sovrano", "type": "Mago", "trait": "Veggente: può anticipare alcuni eventi casuali,  Voce del Flutto e della Fronda: le sue magie di occultamento (nebbia, bruma, mimetismo) e di dominio della natura (mare e foresta: mulinelli, radici, correnti, tempeste) sono più potenti ed efficaci.", "status": "attivo", "notes": "", "genere": "F"}, {"name": "Canuto", "role": "Ricercatore", "type": "Ricercatore", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}], "password_hash": "7a4a3de3"}}};
 
 function fnv1aHash(str) {
   var bytes = new TextEncoder().encode(str);
@@ -94,9 +100,28 @@ function sanitize(str) {
   });
   var remembered = sessionStorage.getItem('orbis_faction');
   if (remembered && CHRONICLE_DATA.factions[remembered]) {
+    loggedInFaction = remembered;
+    populateVisitList();
     renderFaction(remembered);
   }
 })();
+
+function populateVisitList() {
+  var el = document.getElementById('visit-list');
+  var others = Object.keys(CHRONICLE_DATA.factions).filter(function(n) { return n !== loggedInFaction; });
+  if (!others.length) {
+    el.innerHTML = '<span class="empty">Nessun altro regno registrato.</span>';
+    return;
+  }
+  el.innerHTML = others.map(function(n) {
+    return '<button class="visit-btn" data-visit-faction="' + sanitize(n) + '" style="padding:0.4rem 0.9rem;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--parchment);cursor:pointer;font-family:\'Crimson Text\',serif;font-size:0.85rem">' + sanitize(n) + '</button>';
+  }).join('');
+  el.querySelectorAll('[data-visit-faction]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      renderPublicFaction(btn.getAttribute('data-visit-faction'));
+    });
+  });
+}
 
 function tryLogin() {
   var fname = document.getElementById('login-faction').value;
@@ -109,11 +134,16 @@ function tryLogin() {
     if (fnv1aHash(pwd) !== f.password_hash) { errEl.textContent = 'Password errata.'; return; }
   }
   sessionStorage.setItem('orbis_faction', fname);
+  loggedInFaction = fname;
+  populateVisitList();
   renderFaction(fname);
 }
 
 function logout() {
   sessionStorage.removeItem('orbis_faction');
+  loggedInFaction = null;
+  document.getElementById('visit-list').innerHTML = '';
+  document.getElementById('visit-panel').removeAttribute('open');
   document.getElementById('app-view').style.display = 'none';
   document.getElementById('login-view').style.display = 'block';
   document.getElementById('login-password').value = '';
@@ -209,12 +239,19 @@ function portraitKey(fname, charName) {
   return 'orbis_portrait:' + encodeURIComponent(fname) + ':' + encodeURIComponent(charName);
 }
 
-function charCardHtml(c, big, fname) {
+function charCardHtml(c, big, fname, readOnly) {
   var icon = CHAR_TYPE_ICONS[c.type] || '👤';
   var genereIcon = GENERE_ICONS[c.genere] || '';
   var traitHtml = c.trait ? '<div style="font-size:0.8rem;opacity:0.75;margin-top:0.2rem">✦ ' + sanitize(c.trait) + '</div>' : '';
   var size = big ? 64 : 44;
   var key = portraitKey(fname, c.name);
+  var controlsHtml = readOnly ? '' :
+    '<div style="margin-top:0.4rem;font-size:0.75rem">' +
+      '<label style="cursor:pointer;color:var(--gold-light);text-decoration:underline">📷 Carica ritratto' +
+        '<input type="file" accept="image/*" class="portrait-input" data-portrait-key="' + sanitize(key) + '" style="display:none">' +
+      '</label>' +
+      '<a class="portrait-remove" data-portrait-key="' + sanitize(key) + '" style="cursor:pointer;color:#e08a8a;text-decoration:underline;margin-left:0.6rem;display:none">✕ Rimuovi</a>' +
+    '</div>';
   return '<div style="border:1px solid var(--border);border-radius:8px;padding:' + (big ? '1rem' : '0.7rem') + ';margin-bottom:0.6rem;background:#0f0c0633">' +
     '<div style="display:flex;align-items:center;gap:0.6rem">' +
       '<div class="portrait-wrap" data-portrait-key="' + sanitize(key) + '" style="width:' + size + 'px;height:' + size + 'px;min-width:' + size + 'px;border-radius:50%;overflow:hidden;border:2px solid var(--gold-light);background:#0f0c06;display:flex;align-items:center;justify-content:center;font-size:' + (big ? '1.6rem' : '1.2rem') + '">' +
@@ -225,14 +262,22 @@ function charCardHtml(c, big, fname) {
         '<div style="font-size:0.8rem;opacity:0.8">' + sanitize(c.role || '') + (c.type ? ' · ' + sanitize(c.type) : '') + '</div>' +
       '</div>' +
     '</div>' +
-    '<div style="margin-top:0.4rem;font-size:0.75rem">' +
-      '<label style="cursor:pointer;color:var(--gold-light);text-decoration:underline">📷 Carica ritratto' +
-        '<input type="file" accept="image/*" class="portrait-input" data-portrait-key="' + sanitize(key) + '" style="display:none">' +
-      '</label>' +
-      '<a class="portrait-remove" data-portrait-key="' + sanitize(key) + '" style="cursor:pointer;color:#e08a8a;text-decoration:underline;margin-left:0.6rem;display:none">✕ Rimuovi</a>' +
-    '</div>' +
+    controlsHtml +
     traitHtml + charEventsHtml(c) +
     '</div>';
+}
+
+function renderTerritories(f) {
+  return '<div class="panel"><div class="panel-title">🗺️ Territori</div>' +
+    ((f.territories || []).length ? '<div class="row">' + f.territories.map(sanitize).join(', ') + '</div>' : '<div class="empty">Solo la capitale.</div>') + '</div>';
+}
+
+function renderArtifacts(f) {
+  return '<div class="panel"><div class="panel-title">🏺 Artefatti</div>' +
+    ((f.artifacts || []).length ? f.artifacts.map(function(a) {
+      return '<div class="row"><strong>' + sanitize(a.name) + '</strong> <span style="opacity:0.6;font-size:0.8rem">(' + sanitize(a.rarity) + ')</span><br>' +
+        '<span style="font-size:0.8rem;opacity:0.75">' + sanitize(a.description) + '</span></div>';
+    }).join('') : '<div class="empty">Nessun artefatto in possesso.</div>') + '</div>';
 }
 
 function groupBuildingsByRegion(f) {
@@ -294,7 +339,7 @@ function renderBuildings(f) {
   html += '</div>';
   return html;
 }
-function renderCourt(f, fname) {
+function renderCourt(f, fname, readOnly) {
   var chars = f.characters || [];
   var active = chars.filter(function(c) { return (c.status || 'attivo') === 'attivo'; });
   var inactive = chars.filter(function(c) { return (c.status || 'attivo') !== 'attivo'; });
@@ -303,11 +348,11 @@ function renderCourt(f, fname) {
 
   var html = '<div class="panel"><div class="panel-title">🏛️ La Corte</div>';
   if (sovrano.length) {
-    html += sovrano.map(function(c) { return charCardHtml(c, true, fname); }).join('');
+    html += sovrano.map(function(c) { return charCardHtml(c, true, fname, readOnly); }).join('');
   }
   if (court.length) {
     html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.6rem;margin-top:' + (sovrano.length ? '0.6rem' : '0') + '">' +
-      court.map(function(c) { return charCardHtml(c, false, fname); }).join('') + '</div>';
+      court.map(function(c) { return charCardHtml(c, false, fname, readOnly); }).join('') + '</div>';
   }
   if (!sovrano.length && !court.length) {
     html += '<div class="empty">Nessun personaggio registrato.</div>';
@@ -354,8 +399,7 @@ function renderFaction(fname) {
     }).join('') + '</div></div>';
 
   // Territori ed edifici
-  html += '<div class="panel"><div class="panel-title">🗺️ Territori</div>' +
-    (f.territories.length ? '<div class="row">' + f.territories.map(sanitize).join(', ') + '</div>' : '<div class="empty">Solo la capitale.</div>') + '</div>';
+  html += renderTerritories(f);
   html += renderBuildings(f);
 
   // Truppe
@@ -385,11 +429,7 @@ function renderFaction(fname) {
     }).join('') : '<div class="empty">Nessuna tecnologia scoperta.</div>') + '</div>';
 
   // Artefatti
-  html += '<div class="panel"><div class="panel-title">🏺 Artefatti</div>' +
-    (f.artifacts.length ? f.artifacts.map(function(a) {
-      return '<div class="row"><strong>' + sanitize(a.name) + '</strong> <span style="opacity:0.6;font-size:0.8rem">(' + sanitize(a.rarity) + ')</span><br>' +
-        '<span style="font-size:0.8rem;opacity:0.75">' + sanitize(a.description) + '</span></div>';
-    }).join('') : '<div class="empty">Nessun artefatto in possesso.</div>') + '</div>';
+  html += renderArtifacts(f);
 
   // Relazioni diplomatiche
   html += '<div class="panel"><div class="panel-title">🤝 Relazioni Diplomatiche</div>' +
@@ -411,6 +451,57 @@ function renderFaction(fname) {
       line += '</div>';
       return line;
     }).join('') : '<div class="empty">Nessuna relazione diplomatica registrata.</div>') + '</div>';
+
+  document.getElementById('app-content').innerHTML = html;
+  attachPortraitHandlers();
+}
+
+function showVisitList() {
+  document.getElementById('faction-title').textContent = '👁️ Visita le Corti del Mondo';
+  var names = Object.keys(CHRONICLE_DATA.factions);
+  var html = '<div class="panel"><div class="panel-title">🌍 Fazioni del Mondo</div>';
+  html += names.map(function(name) {
+    var isMe = name === currentFaction;
+    return '<div class="row" style="display:flex;justify-content:space-between;align-items:center">' +
+      '<span>' + sanitize(name) + (isMe ? ' <span style="opacity:0.6;font-size:0.8rem">(la tua fazione)</span>' : '') + '</span>' +
+      (isMe ? '' : '<a class="visit-link" data-visit-faction="' + sanitize(name) + '" style="cursor:pointer;color:var(--gold-light);text-decoration:underline;font-size:0.85rem">Visita →</a>') +
+      '</div>';
+  }).join('') + '</div>';
+  html += '<div style="text-align:center;margin-top:1rem">' +
+    '<a onclick="renderFaction(currentFaction)" style="cursor:pointer;color:var(--gold-light);text-decoration:underline;font-size:0.85rem">← Torna ai tuoi Domini</a>' +
+    '</div>';
+  document.getElementById('app-content').innerHTML = html;
+  document.querySelectorAll('.visit-link[data-visit-faction]').forEach(function(a) {
+    a.addEventListener('click', function() {
+      renderPublicFaction(this.getAttribute('data-visit-faction'));
+    });
+  });
+}
+
+function renderPublicFaction(fname) {
+  // Vista pubblica: solo cio' che non da' vantaggio competitivo a chi guarda (Corte, Territori,
+  // Edifici, Artefatti). Restano fuori risorse, militare/stabilita'/popolazione, truppe, ricerche
+  // in corso e relazioni diplomatiche — quelli si vedono solo nella propria pagina privata.
+  var f = CHRONICLE_DATA.factions[fname];
+  document.getElementById('faction-title').textContent = '👁️ ' + fname + ' ⚜ (vista pubblica)';
+  document.getElementById('app-meta').textContent = '⚙ ' + sanitize(CHRONICLE_DATA.world_name) + ' — ' + sanitize(CHRONICLE_DATA.month_year) +
+    ' (Turno ' + CHRONICLE_DATA.turn + ') · Dati generati il ' + sanitize(CHRONICLE_DATA.generated_at);
+
+  var html = '';
+  html += '<div class="panel"><div class="panel-title">🏰 Il Regno</div>' +
+    '<div class="row">Razza: <strong>' + sanitize(f.race) + '</strong> · Zona: <strong>' + sanitize(f.zone) + '</strong></div>' +
+    '</div>';
+
+  html += renderCourt(f, fname, true);
+  html += renderTerritories(f);
+  html += renderBuildings(f);
+  html += renderArtifacts(f);
+
+  html += '<div style="text-align:center;margin-top:1rem">' +
+    '<a onclick="showVisitList()" style="cursor:pointer;color:var(--gold-light);text-decoration:underline;font-size:0.85rem">← Torna alla lista delle Corti</a>' +
+    ' &nbsp;·&nbsp; ' +
+    '<a onclick="renderFaction(currentFaction)" style="cursor:pointer;color:var(--gold-light);text-decoration:underline;font-size:0.85rem">← Torna ai tuoi Domini</a>' +
+    '</div>';
 
   document.getElementById('app-content').innerHTML = html;
   attachPortraitHandlers();
