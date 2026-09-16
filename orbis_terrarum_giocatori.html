@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orbis Terrarum — I Miei Domini</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+  :root {
+    --ink: #1a1208; --parchment: #f4ead8; --gold: #8b6914;
+    --gold-light: #c4962a; --red: #8b1a1a; --border: #c4962a44;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--ink); min-height: 100vh; font-family: 'Crimson Text', Georgia, serif; color: var(--parchment); }
+  .masthead { text-align: center; padding: 2rem 1rem 1rem; border-bottom: 1px solid var(--border); }
+  .masthead h1 { font-family: 'Cinzel', serif; color: var(--gold-light); letter-spacing: 0.15em; font-size: 1.6rem; }
+  .masthead small { opacity: 0.6; display: block; margin-top: 0.4rem; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+  .login-box { max-width: 380px; margin: 3rem auto; padding: 1.5rem; border: 1px solid var(--border); background: #0f0c0688; border-radius: 8px; }
+  .login-box label { display: block; font-family: 'Cinzel', serif; font-size: 0.8rem; color: var(--gold-light); margin: 0.8rem 0 0.3rem; }
+  .login-box select, .login-box input { width: 100%; padding: 0.5rem; background: #0f0c06; border: 1px solid var(--border); color: var(--parchment); border-radius: 4px; font-family: 'Crimson Text', serif; font-size: 1rem; }
+  .login-box button { width: 100%; margin-top: 1.2rem; padding: 0.6rem; background: linear-gradient(135deg, var(--gold-light), var(--gold)); border: none; border-radius: 4px; color: var(--ink); font-family: 'Cinzel', serif; font-weight: 700; cursor: pointer; letter-spacing: 0.05em; }
+  .login-box button:hover { filter: brightness(1.1); }
+  #login-error { color: #e08a8a; font-size: 0.85rem; margin-top: 0.6rem; min-height: 1.2em; }
+  .panel { border: 1px solid var(--border); background: #0f0c0655; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+  .panel-title { font-family: 'Cinzel', serif; color: var(--gold-light); font-size: 1rem; margin-bottom: 0.7rem; letter-spacing: 0.03em; }
+  .res-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+  .res-item { text-align: center; padding: 0.5rem; background: #0f0c0644; border-radius: 6px; }
+  .res-item .val { font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--gold-light); }
+  .res-item .lbl { font-size: 0.75rem; opacity: 0.7; }
+  .row { padding: 0.4rem 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+  .row:last-child { border-bottom: none; }
+  .badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 3px; font-size: 0.7rem; margin-left: 0.4rem; }
+  .bar-bg { background: #1a1208; height: 7px; border-radius: 4px; margin-top: 3px; }
+  .bar-fill { background: var(--gold-light); height: 7px; border-radius: 4px; }
+  .empty { opacity: 0.5; font-size: 0.85rem; font-style: italic; }
+  .logout { text-align: center; margin-top: 1.5rem; }
+  .logout a { color: var(--gold-light); font-size: 0.85rem; cursor: pointer; text-decoration: underline; }
+  #app-view { display: none; }
+</style>
+</head>
+<body>
+
+<div id="login-view">
+  <div class="masthead">
+    <h1>⚜ ORBIS TERRARUM ⚜</h1>
+    <small id="login-meta"></small>
+  </div>
+  <div class="login-box">
+    <label>La tua Fazione</label>
+    <select id="login-faction"><option value="">— Seleziona —</option></select>
+    <label>Password</label>
+    <input type="password" id="login-password" placeholder="••••••••">
+    <button onclick="tryLogin()">Entra nei Tuoi Domini</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<div id="app-view">
+  <div class="masthead">
+    <h1 id="faction-title">⚜ ORBIS TERRARUM ⚜</h1>
+    <small id="app-meta"></small>
+  </div>
+  <div class="wrap" id="app-content"></div>
+  <div class="logout"><a onclick="logout()">← Cambia fazione</a></div>
+</div>
+
+<script>
+var CHRONICLE_DATA = {"world_name": "Orbis Terrarum", "turn": 8, "month_year": "Agosto, Anno 1", "generated_at": "16/09/2026 16:40", "factions": {"Arcontato della Salvezza": {"race": "Umani", "zone": "Centro", "military": 4, "stability": 6, "population": 8, "resources": {"cibo": 16.0, "legname": 45.0, "pietra": 19.0, "ferro": 5.0, "gemme": 1.0, "oro": 165.0}, "territories": ["Arcontato della Salvezza (capitale)", "C12", "C14", "S21"], "buildings": ["Biblioteca della Rivelazione Eterna", "Prefettura dei Rifornimenti e delle Oasi", "Grande Oasi della Redenzione", "Ordine dei Cartografi della Luce", "Fattoria, LV2, C12", "Fattoria, LV2, C13 (Capitale)"], "troops": {"Purificatori": 3}, "researches_active": [], "researches_completed": [{"name": "Programma di Ricerca Agraria e Officinale", "category": "custom", "effect": "\"+3 Cibo per Fattoria permanente.\""}, {"name": "Agricoltura intensiva", "category": "minor", "effect": "+1 Cibo per turno permanente"}], "artifacts": [], "diplomacy": [{"fazione": "I Figli del Filo", "stato": "patto commerciale", "scambio": {"esporta": {}, "riceve": {}, "bonus": {"oro": 12.0}, "turni_rimanenti": null, "note": ""}}], "characters": [{"name": "Ardenis IV", "role": "Sovrano", "type": "Diplomatico", "trait": "Oratore: trattati più facili da ratificare, Benedetto dagli Dei: le feste religiose hanno effetto doppio", "status": "attivo", "notes": ""}, {"name": "Sultanius Arren", "role": "Ricercatore", "type": "Ricercatore", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}, {"name": "Aurelius Valerian", "role": "Pontifex Belli", "type": "Generale", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}, {"name": "Sarlena Osiris", "role": "Personaggio", "type": "Ricercatore", "trait": "", "genere": "F", "eventi": [], "status": "attivo", "notes": ""}], "password_hash": "e7a86472"}, "La Casta Operosa": {"race": "Drah", "zone": "Sud", "military": 5, "stability": 4, "population": 3, "resources": {"cibo": -16.0, "legname": 16.0, "pietra": 42.0, "ferro": 21.0, "gemme": 1.0, "oro": 84.0}, "territories": ["La Casta Operosa (capitale)", "S8", "S7", "P22"], "buildings": ["Archivio Logistico Centrale", "Banchine d'Attracco (pesca), LV1, S7", "Silos, LV1, S7", "Fattoria, LV1, S8", "Città, LV1, S7", "Città, LV1, S8"], "troops": {"Fanteria": 3, "Schermagliatori": 1}, "researches_active": [], "researches_completed": [{"name": "Agricoltura Intensiva", "category": "minor", "effect": "+1 Cibo per turno permanente"}, {"name": "Tattiche di fanteria", "category": "minor", "effect": "Bonus difensivo nelle battaglie campali"}], "artifacts": [{"name": "Monete d'epoca", "rarity": "common", "description": "Una cassa di monete antiche di valore ancora riconosciuto dai mercanti.", "effect": {"oro": 4}, "active": true}], "diplomacy": [{"fazione": "Karag-Duraz", "stato": "patto commerciale", "scambio": {"esporta": {"cibo": 2.0, "oro": 3.0}, "riceve": {"legname": 1.0, "pietra": 2.0, "ferro": 2.0}, "bonus": {"oro": 6.0}, "turni_rimanenti": 4, "note": ""}}], "characters": [{"name": "Elias Dorn", "role": "Sovrano", "type": "Amministratore", "trait": "Commerciante nato: rotte commerciali più redditizie, Arbiter della Meritocrazia: L'autorità di Dorn trasforma le revisioni sociali in strumenti di controllo della Stabilità; il timore del declassamento spinge la popolazione a performance lavorative di alto livello, garantendo bonus alla produzione di risorse base e alla stabilità sociale.", "status": "attivo", "notes": ""}, {"name": "Kaelen Vex", "role": "Personaggio", "type": "Mercante", "trait": "", "status": "attivo", "notes": ""}, {"name": "Kaelis Vhor", "role": "Personaggio", "type": "Ricercatore", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}], "password_hash": "d582a0a5"}, "Karag-Duraz": {"race": "Karag-Duraz", "zone": "Nord", "military": 6, "stability": 5, "population": 5, "resources": {"cibo": 56.0, "legname": 26.0, "pietra": 40.0, "ferro": 19.0, "gemme": 2, "oro": 100.0}, "territories": ["Karag-Duraz (capitale)", "N4", "N7", "N5", "N10", "N3", "P7"], "buildings": ["Ambasciata Corte Casta Operosa", "Ambasciata corte Figli del Filo", "Fattoria Sotterranea N6 LV1", "Fattoria Sotterranea N10 LV1", "Fattoria Sotterranea N5 LV1", "Mercato delle Carovane del Nord (capitale)", "Biblioteca Runica dei Sette Clan (capitale)", "Zecca Runica dei Sette Clan, N6", "Grande Miniera del Ferro Nero, LV1, N7", "Fortezza, P7", "Ambasciata corte Velarium della Bruma"], "troops": {"Fanteria": 3, "Arcieri": 2}, "researches_active": [{"name": "Scheggia del Canto di Roccia", "category": "custom", "effect": "Bonus permanente +1 alla produzione delle miniere", "turni_completati": 2, "turni_necessari": 3, "has_researcher": true}], "researches_completed": [{"name": "Architettura militare", "category": "major", "effect": "Fortezze costano 1 PA invece di 2"}], "artifacts": [{"name": "Scheggia del Canto di Roccia", "rarity": "uncommon", "description": "\"Un frammento di pietra traslucida, cavato dalle vene sotto N5, che pare emettere un debolissimo ronzio armonico nelle notti di gelo profondo — lo stesso canto che i minatori del clan Yulruk giuravano di udire tra quelle gallerie dimenticate. Nessun Maestro Archivista ha ancora osato profanarla con lo studio.\"", "effect": {"gemme": 1, "permanente": true, "narrativo": true, "master_note": "Nota per il Master: \"Possibile aggancio futuro alla trama del Primo Giuramento — se un giorno vuoi svilupparla, questo frammento può rivelarsi una chiave. Per ora resta un mistero non svelato, nessuno ha ancora osato studiarlo.\""}, "active": true}], "diplomacy": [{"fazione": "La Casta Operosa", "stato": "patto commerciale", "scambio": {"esporta": {"legname": 1.0, "pietra": 2.0, "ferro": 2.0}, "riceve": {"cibo": 2.0, "oro": 3.0}, "bonus": {"oro": 6.0}, "turni_rimanenti": 4, "note": ""}}, {"fazione": "I Figli del Filo", "stato": "patto commerciale", "scambio": {"esporta": {"pietra": 1.0, "ferro": 2.0}, "riceve": {"cibo": 3.0}, "bonus": {"oro": 6.0}, "turni_rimanenti": null, "note": ""}}], "characters": [{"name": "Vor-Khazad Brannir Frangimartello", "role": "Sovrano", "type": "Generale", "trait": "Stratega: vantaggio battaglie in difesa. Voce degli Antenati: Quando combattono nelle terre del Nord (province 1-10) le truppe ricevono un bonus al morale.", "status": "attivo", "notes": ""}], "password_hash": "423f0740"}, "I Figli del Filo": {"race": "Iorph", "zone": "Est", "military": 3, "stability": 8, "population": 5, "resources": {"cibo": 18.0, "legname": 69.0, "pietra": 22.0, "ferro": 13.0, "gemme": 1.0, "oro": 179.0}, "territories": ["I Figli del Filo (capitale)", "E19", "E16", "E17"], "buildings": ["Grande Emporio dell'Hibiol", "Granai del Fuso", "Archivio Reale (capitale)", "Banchine da Pesca, LV1, E18", "Fattorie Costiere, LV1, E18", "Emporio Reale del Fuso, LV1, E18 (Aumenta efficienza risorse ottenute dagli scambi commerciali)", "Fortezza, LV1, E17"], "troops": {"Schermagliatori": 3, "Fanteria": 1}, "researches_active": [{"name": "Diplomazia avanzata", "category": "major", "effect": "Trattati costano 0 PA", "turni_completati": 2, "turni_necessari": 6, "has_researcher": false}], "researches_completed": [{"name": "Agricoltura Intensiva", "category": "minor", "effect": "+1 Cibo per turno permanente"}, {"name": "Cartografia", "category": "minor", "effect": "Esplorazione costa 0 PA invece di 0.5"}], "artifacts": [], "diplomacy": [{"fazione": "Karag-Duraz", "stato": "patto commerciale", "scambio": {"esporta": {"cibo": 3.0}, "riceve": {"pietra": 1.0, "ferro": 2.0}, "bonus": {"pietra": 1.0, "oro": 7.0}, "turni_rimanenti": null, "note": ""}}, {"fazione": "Arcontato della Salvezza", "stato": "patto commerciale", "scambio": {"esporta": {}, "riceve": {}, "bonus": {"oro": 14.0}, "turni_rimanenti": null, "note": ""}}], "characters": [{"name": "Regina Racine", "role": "Sovrano", "type": "Diplomatico", "trait": "Il Fuso Centrale:i costi diplomatici sono dimezzati e le fazioni che commerciano con i Iorph subiscono un malus di -1 Stabilità se interrompono i rapporti.  Custode del Grande Hibiol: azione diplomatica bonus \"Embargo\": possono interrompere le rotte commerciali di una fazione nemica.", "status": "attivo", "notes": "", "genere": "F"}, {"name": "Tiberias", "role": "Personaggio", "type": "Mercante", "trait": "", "status": "attivo", "notes": ""}], "password_hash": "138d39f1"}, "Il Velarium della Bruma": {"race": "Nebelith", "zone": "Ovest", "military": 5, "stability": 6, "population": 5, "resources": {"cibo": 26.0, "legname": 90.0, "pietra": 25.0, "ferro": 5.0, "gemme": 16.5, "oro": 80.0}, "territories": ["Il Velarium della Bruma (capitale)", "O8", "O2", "O6", "O21"], "buildings": ["Archivio Risorse", "Archivio delle Maree (capitale)", "L'Anello che beve, LV3, Capitale", "Banchina delle Nebbie (pesca), LV3, O2", "Banchina delle Nebbie (pesca), LV1, O8", "Città, LV1, O21"], "troops": {"Grigiomanti": 2}, "researches_active": [{"name": "LA NEBBIA PERENNE", "category": "custom", "effect": "Sbloccare la costruzione dell'Anello del Riflusso, struttura megalitica che impone permanentemente sulla propria provincia il bonus-territorio Nebbia Perenne — velo perpetuo in cui i Nebelith si dissolvono, le truppe divengono impalpabili e i nemici perdono confini e direzione. Il primo strumento del Riflusso.", "turni_completati": 5, "turni_necessari": 6, "has_researcher": true}], "researches_completed": [{"name": "La Lingua delle Radici Sommerse", "category": "custom", "effect": "Obiettivo: padroneggiare l'arte arcana di generare Gemme — cioè indurre artificialmente, tramite l'Anello che Beve e il rito, la condensazione della bruma in gemme, dotando il Velarium di una fonte di mana propria e rinnovabile che nessun'altra fazione possiede."}], "artifacts": [{"name": "Cristallo dell'Era Antica", "rarity": "rare", "description": "Un cristallo di origine sconosciuta che pulsa di energia magica concentrata.", "effect": {"gemme": 3, "permanente": true}, "active": true}], "diplomacy": [], "characters": [{"name": "Majora Nébrahil", "role": "Sovrano", "type": "Mago", "trait": "Veggente: può anticipare alcuni eventi casuali,  Voce del Flutto e della Fronda: le sue magie di occultamento (nebbia, bruma, mimetismo) e di dominio della natura (mare e foresta: mulinelli, radici, correnti, tempeste) sono più potenti ed efficaci.", "status": "attivo", "notes": "", "genere": "F"}, {"name": "Canuto", "role": "Ricercatore", "type": "Ricercatore", "trait": "", "genere": "M", "eventi": [], "status": "attivo", "notes": ""}], "password_hash": "7a4a3de3"}}};
+
+function fnv1aHash(str) {
+  var bytes = new TextEncoder().encode(str);
+  var h = 0x811c9dc5;
+  for (var i = 0; i < bytes.length; i++) {
+    h ^= bytes[i];
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(16).padStart(8, '0');
+}
+
+function sanitize(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+(function init() {
+  var meta = '⚙ ' + sanitize(CHRONICLE_DATA.world_name) + ' — ' + sanitize(CHRONICLE_DATA.month_year) +
+    ' (Turno ' + CHRONICLE_DATA.turn + ') · Dati generati il ' + sanitize(CHRONICLE_DATA.generated_at);
+  document.getElementById('login-meta').textContent = meta;
+  var sel = document.getElementById('login-faction');
+  Object.keys(CHRONICLE_DATA.factions).forEach(function(name) {
+    var opt = document.createElement('option');
+    opt.value = name; opt.textContent = name;
+    sel.appendChild(opt);
+  });
+  var remembered = sessionStorage.getItem('orbis_faction');
+  if (remembered && CHRONICLE_DATA.factions[remembered]) {
+    renderFaction(remembered);
+  }
+})();
+
+function tryLogin() {
+  var fname = document.getElementById('login-faction').value;
+  var pwd = document.getElementById('login-password').value;
+  var errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  if (!fname) { errEl.textContent = 'Seleziona la tua fazione.'; return; }
+  var f = CHRONICLE_DATA.factions[fname];
+  if (f.password_hash) {
+    if (fnv1aHash(pwd) !== f.password_hash) { errEl.textContent = 'Password errata.'; return; }
+  }
+  sessionStorage.setItem('orbis_faction', fname);
+  renderFaction(fname);
+}
+
+function logout() {
+  sessionStorage.removeItem('orbis_faction');
+  document.getElementById('app-view').style.display = 'none';
+  document.getElementById('login-view').style.display = 'block';
+  document.getElementById('login-password').value = '';
+}
+
+var RES_ICONS = {cibo:'🌾', legname:'🪵', pietra:'🪨', ferro:'⚔️', gemme:'💎', oro:'💰'};
+var CAT_LABELS = {minor:'Minore', major:'Maggiore', epic:'Epica', custom:'Custom'};
+var CAT_COLORS = {minor:'#1a3a6b', major:'#2c5e1a', epic:'#6b1010', custom:'#5e3a8c'};
+var DIPL_COLORS = {'neutrale':'#555','in trattative':'#8c6d1a','alleata':'#2c5e1a','ostile':'#6b1010','patto commerciale':'#1a4d5e'};
+var CHAR_TYPE_ICONS = {'Generale':'⚔️','Diplomatico':'🕊️','Mago':'✨','Esploratore':'🧭','Amministratore':'📜'};
+var GENERE_ICONS = {'M':'♂','F':'♀'};
+
+function charEventsHtml(c) {
+  var eventi = c.eventi || [];
+  if (!eventi.length) return '';
+  return '<details style="margin-top:0.5rem"><summary style="cursor:pointer;font-size:0.8rem;color:var(--gold-light);font-family:\'Cinzel\',serif">📜 Cronaca personale (' + eventi.length + ')</summary>' +
+    '<div style="margin-top:0.4rem">' + eventi.map(function(e) {
+      return '<div style="font-size:0.8rem;opacity:0.8;padding:0.3rem 0;border-bottom:1px solid var(--border)">' + sanitize(e) + '</div>';
+    }).join('') + '</div></details>';
+}
+
+function charCardHtml(c, big) {
+  var icon = CHAR_TYPE_ICONS[c.type] || '👤';
+  var genereIcon = GENERE_ICONS[c.genere] || '';
+  var traitHtml = c.trait ? '<div style="font-size:0.8rem;opacity:0.75;margin-top:0.2rem">✦ ' + sanitize(c.trait) + '</div>' : '';
+  return '<div style="border:1px solid var(--border);border-radius:8px;padding:' + (big ? '1rem' : '0.7rem') + ';margin-bottom:0.6rem;background:#0f0c0633">' +
+    '<div style="font-family:\'Cinzel\',serif;font-size:' + (big ? '1.1rem' : '0.95rem') + ';color:var(--gold-light)">' + icon + ' ' + sanitize(c.name) + (genereIcon ? ' <span style="opacity:0.6">' + genereIcon + '</span>' : '') + '</div>' +
+    '<div style="font-size:0.8rem;opacity:0.8">' + sanitize(c.role || '') + (c.type ? ' · ' + sanitize(c.type) : '') + '</div>' +
+    traitHtml + charEventsHtml(c) +
+    '</div>';
+}
+
+function groupBuildingsByRegion(f) {
+  // Gli edifici sono testo libero (es. "Fattoria, LV2, C12", "Archivio Reale (capitale)"),
+  // non un campo strutturato — qui si cerca un codice di provincia (es. C12, N6, P22) nel
+  // testo, ignorando gli indicatori di livello (LV1, LV2...) per non confonderli con un codice.
+  // Chi non ha un codice riconoscibile, o menziona esplicitamente la capitale, finisce in un
+  // gruppo unico "Capitale / Sede Centrale".
+  var buildings = f.buildings || [];
+  var territories = f.territories || [];
+  var knownCodes = territories.filter(function(t) { return !/capitale/i.test(t); }).map(function(t) { return t.trim(); });
+
+  var groups = {};
+  var capitale = [];
+
+  buildings.forEach(function(b) {
+    if (/capitale/i.test(b)) { capitale.push(b); return; }
+    var cleaned = b.replace(/\bLV\s*\d+\b/gi, '');
+    var match = cleaned.match(/\b[A-Za-z]{1,2}\d{1,2}\b/);
+    if (match) {
+      var code = match[0].toUpperCase();
+      groups[code] = groups[code] || [];
+      groups[code].push(b);
+    } else {
+      capitale.push(b);
+    }
+  });
+
+  // Ordine: prima i codici noti, nell'ordine in cui appaiono nei territori; poi eventuali
+  // codici trovati negli edifici ma non ancora registrati come territorio, in ordine alfabetico
+  var orderedCodes = [];
+  knownCodes.forEach(function(t) {
+    Object.keys(groups).forEach(function(code) {
+      if (t.toUpperCase().indexOf(code) !== -1 && orderedCodes.indexOf(code) === -1) orderedCodes.push(code);
+    });
+  });
+  Object.keys(groups).sort().forEach(function(code) {
+    if (orderedCodes.indexOf(code) === -1) orderedCodes.push(code);
+  });
+
+  return { capitale: capitale, regioni: orderedCodes.map(function(code) { return { code: code, buildings: groups[code] }; }) };
+}
+
+function renderBuildings(f) {
+  var buildings = f.buildings || [];
+  var html = '<div class="panel"><div class="panel-title">🏛️ Edifici</div>';
+  if (!buildings.length) {
+    return html + '<div class="empty">Nessuno oltre le infrastrutture base.</div></div>';
+  }
+  var g = groupBuildingsByRegion(f);
+  if (g.capitale.length) {
+    html += '<details open style="margin-bottom:0.4rem"><summary style="cursor:pointer;font-family:\'Cinzel\',serif;font-size:0.85rem;color:var(--gold-light)">🏛️ Capitale / Sede Centrale (' + g.capitale.length + ')</summary>' +
+      '<div class="row" style="margin-top:0.3rem;border-bottom:none">' + g.capitale.map(sanitize).join(', ') + '</div></details>';
+  }
+  g.regioni.forEach(function(r) {
+    html += '<details style="margin-bottom:0.4rem"><summary style="cursor:pointer;font-family:\'Cinzel\',serif;font-size:0.85rem;color:var(--gold-light)">📍 ' + sanitize(r.code) + ' (' + r.buildings.length + ')</summary>' +
+      '<div class="row" style="margin-top:0.3rem;border-bottom:none">' + r.buildings.map(sanitize).join(', ') + '</div></details>';
+  });
+  html += '</div>';
+  return html;
+}
+function renderCourt(f) {
+  var chars = f.characters || [];
+  var active = chars.filter(function(c) { return (c.status || 'attivo') === 'attivo'; });
+  var inactive = chars.filter(function(c) { return (c.status || 'attivo') !== 'attivo'; });
+  var sovrano = active.filter(function(c) { return c.role === 'Sovrano'; });
+  var court = active.filter(function(c) { return c.role !== 'Sovrano'; });
+
+  var html = '<div class="panel"><div class="panel-title">🏛️ La Corte</div>';
+  if (sovrano.length) {
+    html += sovrano.map(function(c) { return charCardHtml(c, true); }).join('');
+  }
+  if (court.length) {
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.6rem;margin-top:' + (sovrano.length ? '0.6rem' : '0') + '">' +
+      court.map(function(c) { return charCardHtml(c, false); }).join('') + '</div>';
+  }
+  if (!sovrano.length && !court.length) {
+    html += '<div class="empty">Nessun personaggio registrato.</div>';
+  }
+  if (inactive.length) {
+    html += '<details style="margin-top:0.8rem"><summary style="cursor:pointer;font-family:\'Cinzel\',serif;font-size:0.85rem;color:#c4962a88">⚰️ Memoriale (' + inactive.length + ')</summary>' +
+      '<div style="margin-top:0.5rem;opacity:0.65">' +
+      inactive.map(function(c) {
+        return '<div style="border-top:1px solid var(--border);padding:0.5rem 0;filter:grayscale(0.5)">' +
+          '<strong>' + sanitize(c.name) + '</strong> <span style="font-size:0.75rem;opacity:0.7">(' + sanitize(c.status) + ')</span>' +
+          (c.notes ? '<div style="font-size:0.8rem;font-style:italic;margin-top:0.2rem">' + sanitize(c.notes) + '</div>' : '') +
+          charEventsHtml(c) +
+          '</div>';
+      }).join('') + '</div></details>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderFaction(fname) {
+  var f = CHRONICLE_DATA.factions[fname];
+  document.getElementById('login-view').style.display = 'none';
+  document.getElementById('app-view').style.display = 'block';
+  document.getElementById('faction-title').textContent = '⚜ ' + fname + ' ⚜';
+  document.getElementById('app-meta').textContent = '⚙ ' + sanitize(CHRONICLE_DATA.world_name) + ' — ' + sanitize(CHRONICLE_DATA.month_year) +
+    ' (Turno ' + CHRONICLE_DATA.turn + ') · Dati generati il ' + sanitize(CHRONICLE_DATA.generated_at);
+
+  var html = '';
+
+  // Stato generale
+  html += '<div class="panel"><div class="panel-title">🏰 Stato del Regno</div>' +
+    '<div class="row">Razza: <strong>' + sanitize(f.race) + '</strong> · Zona: <strong>' + sanitize(f.zone) + '</strong></div>' +
+    '<div class="row">Militare: <strong>' + f.military + '/10</strong> · Stabilità: <strong>' + f.stability + '/10</strong> · Popolazione: <strong>' + f.population + '/10</strong></div>' +
+    '</div>';
+
+  // Corte — sovrano e personaggi attivi in evidenza, deceduti/ritirati nel Memoriale
+  html += renderCourt(f);
+
+  // Risorse
+  html += '<div class="panel"><div class="panel-title">💰 Risorse</div><div class="res-grid">' +
+    Object.keys(RES_ICONS).map(function(r) {
+      return '<div class="res-item"><div class="val">' + (f.resources[r] !== undefined ? f.resources[r] : 0) + '</div><div class="lbl">' + RES_ICONS[r] + ' ' + r + '</div></div>';
+    }).join('') + '</div></div>';
+
+  // Territori ed edifici
+  html += '<div class="panel"><div class="panel-title">🗺️ Territori</div>' +
+    (f.territories.length ? '<div class="row">' + f.territories.map(sanitize).join(', ') + '</div>' : '<div class="empty">Solo la capitale.</div>') + '</div>';
+  html += renderBuildings(f);
+
+  // Truppe
+  var troopKeys = Object.keys(f.troops || {}).filter(function(k) { return f.troops[k] > 0; });
+  html += '<div class="panel"><div class="panel-title">⚔️ Truppe</div>' +
+    (troopKeys.length ? troopKeys.map(function(t) {
+      return '<div class="row">' + sanitize(t) + ': <strong>' + f.troops[t] + '</strong></div>';
+    }).join('') : '<div class="empty">Nessuna truppa arruolata.</div>') + '</div>';
+
+  // Ricerche in corso
+  html += '<div class="panel"><div class="panel-title">🔬 Ricerche in Corso</div>' +
+    (f.researches_active.length ? f.researches_active.map(function(r) {
+      var pct = Math.round(r.turni_completati / r.turni_necessari * 100);
+      return '<div class="row"><strong>' + sanitize(r.name) + '</strong>' +
+        '<span class="badge" style="background:' + (CAT_COLORS[r.category]||'#333') + '">' + (CAT_LABELS[r.category]||'') + '</span><br>' +
+        '<span style="font-size:0.8rem;opacity:0.75">' + sanitize(r.effect) + '</span>' +
+        '<div class="bar-bg"><div class="bar-fill" style="width:' + pct + '%"></div></div>' +
+        '<span style="font-size:0.75rem;opacity:0.6">' + r.turni_completati + ' / ' + r.turni_necessari + ' turni</span></div>';
+    }).join('') : '<div class="empty">Nessuna ricerca attiva.</div>') + '</div>';
+
+  // Tecnologie scoperte
+  html += '<div class="panel"><div class="panel-title">✅ Tecnologie Scoperte</div>' +
+    (f.researches_completed.length ? f.researches_completed.map(function(t) {
+      return '<div class="row">' + sanitize(t.name) +
+        '<span class="badge" style="background:' + (CAT_COLORS[t.category]||'#333') + '">' + (CAT_LABELS[t.category]||'') + '</span><br>' +
+        '<span style="font-size:0.8rem;opacity:0.75">' + sanitize(t.effect) + '</span></div>';
+    }).join('') : '<div class="empty">Nessuna tecnologia scoperta.</div>') + '</div>';
+
+  // Artefatti
+  html += '<div class="panel"><div class="panel-title">🏺 Artefatti</div>' +
+    (f.artifacts.length ? f.artifacts.map(function(a) {
+      return '<div class="row"><strong>' + sanitize(a.name) + '</strong> <span style="opacity:0.6;font-size:0.8rem">(' + sanitize(a.rarity) + ')</span><br>' +
+        '<span style="font-size:0.8rem;opacity:0.75">' + sanitize(a.description) + '</span></div>';
+    }).join('') : '<div class="empty">Nessun artefatto in possesso.</div>') + '</div>';
+
+  // Relazioni diplomatiche
+  html += '<div class="panel"><div class="panel-title">🤝 Relazioni Diplomatiche</div>' +
+    (f.diplomacy.length ? f.diplomacy.map(function(d) {
+      var line = '<div class="row">' + sanitize(d.fazione) +
+        '<span class="badge" style="background:' + (DIPL_COLORS[d.stato]||'#555') + '">' + sanitize(d.stato) + '</span>';
+      if (d.scambio) {
+        var esp = Object.keys(d.scambio.esporta).map(function(r){ return d.scambio.esporta[r] + ' ' + r; }).join(', ') || 'nulla';
+        var ric = Object.keys(d.scambio.riceve).map(function(r){ return d.scambio.riceve[r] + ' ' + r; }).join(', ') || 'nulla';
+        var durata = d.scambio.turni_rimanenti === null ? 'indefinita' : (d.scambio.turni_rimanenti + ' turni rimanenti');
+        line += '<div style="font-size:0.8rem;opacity:0.75;margin-top:0.2rem">Esporta: ' + sanitize(esp) + ' · Riceve: ' + sanitize(ric) + ' · Durata: ' + sanitize(durata) + '</div>';
+        var bonusKeys = Object.keys(d.scambio.bonus || {});
+        if (bonusKeys.length) {
+          var bonusTxt = bonusKeys.map(function(r){ return d.scambio.bonus[r] + ' ' + r; }).join(', ');
+          line += '<div style="font-size:0.8rem;opacity:0.75">Guadagno dalla rotta (per turno, non sottratto alla controparte): ' + sanitize(bonusTxt) + '</div>';
+        }
+        if (d.scambio.note) line += '<div style="font-size:0.75rem;opacity:0.6;font-style:italic">' + sanitize(d.scambio.note) + '</div>';
+      }
+      line += '</div>';
+      return line;
+    }).join('') : '<div class="empty">Nessuna relazione diplomatica registrata.</div>') + '</div>';
+
+  document.getElementById('app-content').innerHTML = html;
+}
+</script>
+</body>
+</html>
